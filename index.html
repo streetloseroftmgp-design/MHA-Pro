@@ -1,141 +1,186 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MHA Pro</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>MHA Pro Ver.2</title>
+<style>
+:root{
+  --bg:#0b1220;--card:#172033;--card2:#22304a;--gold:#ffd700;
+  --text:#f8fafc;--sub:#cbd5e1;--go:#22c55e;--warn:#f59e0b;--skip:#ef4444;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#0b1220,#0f172a);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+.wrap{max-width:560px;margin:auto;padding:18px 14px 90px}
+h1{color:var(--gold);margin:0 0 4px;font-size:30px}
+.sub{color:var(--sub);font-size:13px;margin-bottom:16px}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 8px 24px #0004
+}
+.card h2{margin:0 0 12px;font-size:20px}
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  border-bottom:1px solid #2e3b56
+}
+.row:last-child{border-bottom:none}
+.GO{color:var(--go)}
+.CAUTION{color:var(--warn)}
+.SKIP{color:var(--skip)}
 
-  <style>
-    body{
-      margin:0;
-      background:#0b1220;
-      color:#fff;
-      font-family:sans-serif;
-    }
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin:6px 0 10px;
+  border:0;
+  border-radius:12px;
+  background:var(--card2);
+  color:white;
+  font-size:16px
+}
+textarea{min-height:74px;resize:vertical}
 
-    .wrap{
-      max-width:520px;
-      margin:auto;
-      padding:16px 14px 80px;
-    }
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:14px;
+  background:var(--gold);
+  color:#111;
+  font-size:17px;
+  font-weight:800;
+  margin-top:6px
+}
+button.secondary{background:#334155;color:white}
 
-    h1{
-      color:#ffd700;
-      margin-bottom:4px;
-    }
-
-    .sub{
-      color:#cbd5e1;
-      font-size:13px;
-      margin-bottom:16px;
-    }
-
-    .card{
-      background:#172033;
-      border-radius:18px;
-      padding:16px;
-      margin:12px 0;
-    }
-
-    .row{
-      display:flex;
-      justify-content:space-between;
-      padding:8px 0;
-      border-bottom:1px solid #2b3648;
-    }
-
-    .GO{color:#22c55e;}
-    .CAUTION{color:#f59e0b;}
-    .SKIP{color:#ef4444;}
-
-    input,select{
-      width:100%;
-      padding:12px;
-      margin:6px 0 10px;
-      border:0;
-      border-radius:12px;
-      background:#253046;
-      color:#fff;
-      font-size:16px;
-    }
-
-    button{
-      width:100%;
-      padding:14px;
-      border:0;
-      border-radius:14px;
-      background:#ffd700;
-      color:#111;
-      font-size:17px;
-      font-weight:bold;
-    }
-
-    .big{
-      font-size:24px;
-      font-weight:bold;
-      color:#ffd700;
-    }
-  </style>
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+.stat{
+  background:var(--card2);
+  border-radius:14px;
+  padding:12px
+}
+.big{
+  font-size:24px;
+  font-weight:800;
+  color:var(--gold)
+}
+.small{font-size:12px;color:var(--sub)}
+.pill{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#24324a;
+  font-size:12px;
+  margin-right:6px
+}
+.topbox{
+  background:#11351f;
+  border:1px solid #208b4d;
+  border-radius:14px;
+  padding:14px
+}
+.nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#0a101ddd;
+  padding:10px 12px;
+  text-align:center;
+  color:var(--sub);
+  font-size:12px;
+  backdrop-filter:blur(8px)
+}
+</style>
 </head>
 
 <body>
 
 <div class="wrap">
 
-  <h1>🏇 MHA Pro</h1>
+  <h1>🏇 MHA Pro Ver.2</h1>
+
   <div class="sub">
-    回収率重視・中央／地方競馬AI
+    スマホ運用版｜手入力レース＋GO判定＋3000円プラン＋Replay/Vault
   </div>
 
   <div class="card">
-    <h2>👑 Oracle Mission</h2>
+    <h2>👑 今日一番GO</h2>
+    <div id="topGo" class="topbox">
+      レースを登録すると自動表示されます。
+    </div>
+  </div>
 
-    <p class="GO">
-      <b>今日一番GO</b>
-    </p>
+  <div class="card">
 
-    <div style="font-size:24px;font-weight:bold;">
-      川崎11R
+    <h2>🏇 レース登録</h2>
+
+    <input id="rTrack" placeholder="競馬場 例：川崎">
+
+    <input id="rNo" placeholder="レース 例：11R">
+
+    <input id="rName" placeholder="レース名（任意）">
+
+    <input id="rMarks" placeholder="印 例：◎⑦ ○③ ▲⑩ △②">
+
+    <div class="grid">
+
+      <input
+        id="rEv"
+        type="number"
+        min="0"
+        max="100"
+        placeholder="Oracle EV"
+      >
+
+      <select id="rTrust">
+        <option>Trust 高</option>
+        <option>Trust 通常</option>
+        <option>Trust 慎重</option>
+      </select>
+
     </div>
 
-    <p>
-      ◎⑦ ○③ ▲⑩ △②
-    </p>
+    <input id="rLongshot" placeholder="穴馬 例：⑩">
 
-    <p>
-      Oracle EV
-      <b>92</b>
-    </p>
+    <input id="rDanger" placeholder="危険馬 例：①">
+
+    <button onclick="addRace()">
+      このレースを登録
+    </button>
+
   </div>
 
   <div class="card">
 
     <h2>⭐ Ultimate Five</h2>
 
-    <div class="row">
-      <span>川崎11R</span>
-      <span class="GO">GO 92</span>
+    <div id="raceList">
+      まだレースがありません。
     </div>
 
-    <div class="row">
-      <span>新潟11R</span>
-      <span class="CAUTION">CAUTION 88</span>
-    </div>
-
-    <div class="row">
-      <span>園田10R</span>
-      <span class="CAUTION">CAUTION 84</span>
-    </div>
-
-    <div class="row">
-      <span>金沢9R</span>
-      <span class="CAUTION">CAUTION 81</span>
-    </div>
-
-    <div class="row">
-      <span>門別12R</span>
-      <span class="SKIP">SKIP 70</span>
-    </div>
+    <button
+      class="secondary"
+      onclick="clearRaces()"
+    >
+      今日のレースを全削除
+    </button>
 
   </div>
 
@@ -143,19 +188,8 @@
 
     <h2>💴 3000円プラン</h2>
 
-    <div class="row">
-      <span>三連複</span>
-      <b>1500円</b>
-    </div>
-
-    <div class="row">
-      <span>ワイド</span>
-      <b>900円</b>
-    </div>
-
-    <div class="row">
-      <span>馬連</span>
-      <b>600円</b>
+    <div id="plan">
+      GOレース登録後に自動表示します。
     </div>
 
   </div>
@@ -164,29 +198,41 @@
 
     <h2>📝 Replay</h2>
 
-    <input
-      id="track"
-      placeholder="競馬場 例：川崎"
-    >
+    <input id="pTrack" placeholder="競馬場">
 
-    <select id="ticket">
+    <input id="pRace" placeholder="レース">
+
+    <select id="pTicket">
       <option>三連複</option>
       <option>ワイド</option>
       <option>馬連</option>
       <option>三連単</option>
+      <option>単勝</option>
+      <option>複勝</option>
     </select>
 
-    <input
-      id="bet"
-      type="number"
-      placeholder="購入額"
-    >
+    <div class="grid">
 
-    <input
-      id="payout"
-      type="number"
-      placeholder="払戻"
-    >
+      <input
+        id="pBet"
+        type="number"
+        inputmode="numeric"
+        placeholder="購入額"
+      >
+
+      <input
+        id="pPayout"
+        type="number"
+        inputmode="numeric"
+        placeholder="払戻"
+      >
+
+    </div>
+
+    <textarea
+      id="pMemo"
+      placeholder="メモ（任意）"
+    ></textarea>
 
     <button onclick="saveReplay()">
       Replayを保存
@@ -198,141 +244,511 @@
 
     <h2>📊 Vault</h2>
 
-    <p>
-      回収率：
-      <span class="big" id="rate">
-        0%
-      </span>
-    </p>
+    <div class="grid">
 
-    <p>
-      利益：
-      <span class="big" id="profit">
-        0円
-      </span>
-    </p>
+      <div class="stat">
+        <div class="big" id="vRate">0%</div>
+        <div>回収率</div>
+      </div>
 
-    <div id="history">
-      Replay履歴なし
+      <div class="stat">
+        <div class="big" id="vProfit">0円</div>
+        <div>利益</div>
+      </div>
+
+      <div class="stat">
+        <div class="big" id="vHit">0%</div>
+        <div>的中率</div>
+      </div>
+
+      <div class="stat">
+        <div class="big" id="vCount">0</div>
+        <div>購入数</div>
+      </div>
+
     </div>
+
+    <div id="bestTrack" style="margin-top:12px"></div>
+
+    <div id="ticketStats" style="margin-top:12px"></div>
+
+    <div id="history" style="margin-top:12px"></div>
 
   </div>
 
 </div>
 
+<div class="nav">
+Home • Race • Replay • Vault • DNA
+</div>
+
 <script>
 
-const KEY="mha-pro-onefile-v1";
+const KEY='mha-pro-v2';
 
-let state=
-JSON.parse(
-  localStorage.getItem(KEY)
-  ||
-  '{"replays":[]}'
+let state=JSON.parse(
+  localStorage.getItem(KEY)||
+  '{"races":[],"replays":[]}'
 );
 
-function renderVault(){
+function saveState(){
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(state)
+  );
+}
 
-  let bet=0;
-  let payout=0;
+function judge(ev){
+  return ev>=90
+    ?'GO'
+    :ev>=75
+    ?'CAUTION'
+    :'SKIP';
+}
 
-  state.replays.forEach(r=>{
+function addRace(){
 
-    bet+=r.bet;
-    payout+=r.payout;
+  const track=rTrack.value.trim();
+  const no=rNo.value.trim();
+  const ev=Number(rEv.value);
+
+  if(!track || !no || Number.isNaN(ev)){
+    alert('競馬場・レース・EVを入力してください');
+    return;
+  }
+
+  state.races.push({
+
+    track,
+    no,
+    name:rName.value.trim(),
+    marks:rMarks.value.trim(),
+    ev,
+
+    trust:rTrust.value,
+
+    longshot:rLongshot.value.trim(),
+
+    danger:rDanger.value.trim()
 
   });
 
-  document.getElementById("rate")
-  .textContent=
-  (bet
-    ?Math.round(payout/bet*100)
-    :0
-  )+"%";
+  saveState();
 
-  document.getElementById("profit")
-  .textContent=
-  (payout-bet)+"円";
+  renderRaces();
 
-  document.getElementById("history")
-  .innerHTML=
+  rTrack.value='';
+  rNo.value='';
+  rName.value='';
+  rMarks.value='';
+  rEv.value='';
+  rLongshot.value='';
+  rDanger.value='';
 
-  state.replays
-  .slice(0,5)
-  .map(r=>
+}
+
+function clearRaces(){
+
+  if(
+    confirm(
+      '今日のレース登録を全部消しますか？'
+    )
+  ){
+
+    state.races=[];
+
+    saveState();
+
+    renderRaces();
+
+  }
+
+}
+
+function renderRaces(){
+
+  const rs=[
+    ...state.races
+  ].sort(
+    (a,b)=>b.ev-a.ev
+  );
+
+  raceList.innerHTML=
+
+    rs.slice(0,5).map(
+      (r,i)=>`
+
+      <div class="row">
+
+        <div>
+
+          <b>
+            ${i+1}. ${r.track}${r.no}
+          </b>
+
+          <br>
+
+          <span class="small">
+            ${r.name||''}
+          </span>
+
+          <br>
+
+          ${r.marks||'印なし'}
+
+          <div class="small">
+            穴:${r.longshot||'-'}
+            /
+            危険:${r.danger||'-'}
+            /
+            ${r.trust}
+          </div>
+
+        </div>
+
+        <div class="${judge(r.ev)}">
+
+          <b>
+            ${judge(r.ev)}
+          </b>
+
+          <br>
+
+          EV ${r.ev}
+
+        </div>
+
+      </div>
+
+      `
+    ).join('')
+
+    ||
+
+    'まだレースがありません。';
+
+  const top=rs[0];
+
+  topGo.innerHTML=
+
+    top
+    ?`
+
+      <div class="${judge(top.ev)}">
+
+        <b>
+          ${judge(top.ev)}
+        </b>
+
+      </div>
+
+      <div
+        style="
+        font-size:24px;
+        font-weight:800
+        "
+      >
+
+        ${top.track}${top.no}
+
+      </div>
+
+      <div>
+        ${top.marks||'印なし'}
+      </div>
+
+      <div>
+
+        Oracle EV
+
+        <b>
+          ${top.ev}
+        </b>
+
+        <span class="pill">
+          ${top.trust}
+        </span>
+
+      </div>
+
+      <div class="small">
+
+        穴馬
+        ${top.longshot||'-'}
+
+        /
+
+        危険馬
+        ${top.danger||'-'}
+
+      </div>
 
     `
-    <div class="row">
-      <span>
-        ${r.track}
-        ${r.ticket}
-      </span>
 
-      <span>
-        ${r.bet}
-        →
-        ${r.payout}
-      </span>
-    </div>
-    `
+    :
 
-  )
-  .join("")
+    'レースを登録すると自動表示されます。';
 
-  ||
+  if(!top){
 
-  "Replay履歴なし";
+    plan.textContent=
+      'GOレース登録後に自動表示します。';
+
+    return;
+
+  }
+
+  if(top.ev>=90){
+
+    plan.innerHTML=
+      '<div class="row"><span>三連複</span><b>1500円</b></div>'+
+      '<div class="row"><span>ワイド</span><b>900円</b></div>'+
+      '<div class="row"><span>馬連</span><b>600円</b></div>';
+
+  }
+
+  else if(top.ev>=80){
+
+    plan.innerHTML=
+      '<div class="row"><span>三連複</span><b>1200円</b></div>'+
+      '<div class="row"><span>ワイド</span><b>1000円</b></div>'+
+      '<div class="row"><span>馬連</span><b>800円</b></div>';
+
+  }
+
+  else{
+
+    plan.innerHTML=
+      '<div class="row"><span>ワイド</span><b>1500円</b></div>'+
+      '<div class="row"><span>馬連</span><b>1500円</b></div>';
+
+  }
 
 }
 
 function saveReplay(){
 
-  const replay={
+  const track=pTrack.value.trim();
 
-    track:
-    document
-    .getElementById("track")
-    .value
-    ||
-    "-",
+  const race=pRace.value.trim();
 
-    ticket:
-    document
-    .getElementById("ticket")
-    .value,
+  const bet=
+    Number(pBet.value)||0;
 
-    bet:
-    Number(
-      document
-      .getElementById("bet")
-      .value
-    )
-    ||0,
+  const payout=
+    Number(pPayout.value)||0;
 
-    payout:
-    Number(
-      document
-      .getElementById("payout")
-      .value
-    )
-    ||0
+  if(
+    !track ||
+    !race ||
+    bet<=0
+  ){
 
-  };
+    alert(
+      '競馬場・レース・購入額を入力してください'
+    );
 
-  state.replays.unshift(replay);
+    return;
 
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(state)
-  );
+  }
+
+  state.replays.unshift({
+
+    date:new Date().toISOString(),
+
+    track,
+
+    race,
+
+    ticket:pTicket.value,
+
+    bet,
+
+    payout,
+
+    memo:pMemo.value.trim()
+
+  });
+
+  saveState();
 
   renderVault();
 
+  pTrack.value='';
+  pRace.value='';
+  pBet.value='';
+  pPayout.value='';
+  pMemo.value='';
+
   alert(
-    "Replayを保存しました"
+    'Replayを保存しました'
   );
 
 }
+
+function renderVault(){
+
+  let bet=0;
+  let payout=0;
+  let hit=0;
+
+  const byTrack={};
+  const byTicket={};
+
+  state.replays.forEach(
+    r=>{
+
+      bet+=r.bet;
+
+      payout+=r.payout;
+
+      if(r.payout>0)
+        hit++;
+
+      byTrack[r.track] ||=
+        {b:0,p:0};
+
+      byTrack[r.track].b+=r.bet;
+
+      byTrack[r.track].p+=r.payout;
+
+      byTicket[r.ticket] ||=
+        {b:0,p:0};
+
+      byTicket[r.ticket].b+=r.bet;
+
+      byTicket[r.ticket].p+=r.payout;
+
+    }
+  );
+
+  vRate.textContent=
+    (
+      bet
+      ?Math.round(
+        payout/bet*100
+      )
+      :0
+    )+'%';
+
+  vProfit.textContent=
+    (
+      payout-bet
+    ).toLocaleString()
+    +'円';
+
+  vHit.textContent=
+    (
+      state.replays.length
+      ?Math.round(
+        hit/
+        state.replays.length*
+        100
+      )
+      :0
+    )+'%';
+
+  vCount.textContent=
+    state.replays.length;
+
+  let best='未学習';
+
+  let bestRate=-1;
+
+  Object.entries(
+    byTrack
+  ).forEach(
+    ([k,v])=>{
+
+      const rr=
+        v.b
+        ?Math.round(
+          v.p/v.b*100
+        )
+        :0;
+
+      if(rr>bestRate){
+
+        bestRate=rr;
+
+        best=
+          `${k} ${rr}%`;
+
+      }
+
+    }
+  );
+
+  bestTrack.innerHTML=
+    '<b>Oracle DNA（得意場）</b><br>'+
+    best;
+
+  ticketStats.innerHTML=
+
+    '<b>券種別回収率</b><br>'+
+
+    (
+      Object.entries(
+        byTicket
+      ).map(
+        ([k,v])=>{
+
+          const rr=
+            v.b
+            ?Math.round(
+              v.p/v.b*100
+            )
+            :0;
+
+          return `
+            <div class="row">
+              <span>${k}</span>
+              <span>${rr}%</span>
+            </div>
+          `;
+
+        }
+      ).join('')
+
+      ||
+
+      'まだデータがありません。'
+    );
+
+  history.innerHTML=
+
+    '<b>最近のReplay</b><br>'+
+
+    (
+      state.replays
+      .slice(0,5)
+      .map(
+        r=>`
+
+        <div class="row">
+
+          <span>
+            ${r.track}${r.race}
+            ${r.ticket}
+          </span>
+
+          <span>
+            ${r.bet}→${r.payout}
+          </span>
+
+        </div>
+
+        `
+      ).join('')
+
+      ||
+
+      'Replay履歴なし'
+    );
+
+}
+
+renderRaces();
 
 renderVault();
 
