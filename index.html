@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MHA Pro</title>
+
+  <style>
+    body{
+      margin:0;
+      background:#0b1220;
+      color:#fff;
+      font-family:sans-serif;
+    }
+
+    .wrap{
+      max-width:520px;
+      margin:auto;
+      padding:16px 14px 80px;
+    }
+
+    h1{
+      color:#ffd700;
+      margin-bottom:4px;
+    }
+
+    .sub{
+      color:#cbd5e1;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+
+    .card{
+      background:#172033;
+      border-radius:18px;
+      padding:16px;
+      margin:12px 0;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      padding:8px 0;
+      border-bottom:1px solid #2b3648;
+    }
+
+    .GO{color:#22c55e;}
+    .CAUTION{color:#f59e0b;}
+    .SKIP{color:#ef4444;}
+
+    input,select{
+      width:100%;
+      padding:12px;
+      margin:6px 0 10px;
+      border:0;
+      border-radius:12px;
+      background:#253046;
+      color:#fff;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      border:0;
+      border-radius:14px;
+      background:#ffd700;
+      color:#111;
+      font-size:17px;
+      font-weight:bold;
+    }
+
+    .big{
+      font-size:24px;
+      font-weight:bold;
+      color:#ffd700;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h1>🏇 MHA Pro</h1>
+  <div class="sub">
+    回収率重視・中央／地方競馬AI
+  </div>
+
+  <div class="card">
+    <h2>👑 Oracle Mission</h2>
+
+    <p class="GO">
+      <b>今日一番GO</b>
+    </p>
+
+    <div style="font-size:24px;font-weight:bold;">
+      川崎11R
+    </div>
+
+    <p>
+      ◎⑦ ○③ ▲⑩ △②
+    </p>
+
+    <p>
+      Oracle EV
+      <b>92</b>
+    </p>
+  </div>
+
+  <div class="card">
+
+    <h2>⭐ Ultimate Five</h2>
+
+    <div class="row">
+      <span>川崎11R</span>
+      <span class="GO">GO 92</span>
+    </div>
+
+    <div class="row">
+      <span>新潟11R</span>
+      <span class="CAUTION">CAUTION 88</span>
+    </div>
+
+    <div class="row">
+      <span>園田10R</span>
+      <span class="CAUTION">CAUTION 84</span>
+    </div>
+
+    <div class="row">
+      <span>金沢9R</span>
+      <span class="CAUTION">CAUTION 81</span>
+    </div>
+
+    <div class="row">
+      <span>門別12R</span>
+      <span class="SKIP">SKIP 70</span>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h2>💴 3000円プラン</h2>
+
+    <div class="row">
+      <span>三連複</span>
+      <b>1500円</b>
+    </div>
+
+    <div class="row">
+      <span>ワイド</span>
+      <b>900円</b>
+    </div>
+
+    <div class="row">
+      <span>馬連</span>
+      <b>600円</b>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h2>📝 Replay</h2>
+
+    <input
+      id="track"
+      placeholder="競馬場 例：川崎"
+    >
+
+    <select id="ticket">
+      <option>三連複</option>
+      <option>ワイド</option>
+      <option>馬連</option>
+      <option>三連単</option>
+    </select>
+
+    <input
+      id="bet"
+      type="number"
+      placeholder="購入額"
+    >
+
+    <input
+      id="payout"
+      type="number"
+      placeholder="払戻"
+    >
+
+    <button onclick="saveReplay()">
+      Replayを保存
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h2>📊 Vault</h2>
+
+    <p>
+      回収率：
+      <span class="big" id="rate">
+        0%
+      </span>
+    </p>
+
+    <p>
+      利益：
+      <span class="big" id="profit">
+        0円
+      </span>
+    </p>
+
+    <div id="history">
+      Replay履歴なし
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const KEY="mha-pro-onefile-v1";
+
+let state=
+JSON.parse(
+  localStorage.getItem(KEY)
+  ||
+  '{"replays":[]}'
+);
+
+function renderVault(){
+
+  let bet=0;
+  let payout=0;
+
+  state.replays.forEach(r=>{
+
+    bet+=r.bet;
+    payout+=r.payout;
+
+  });
+
+  document.getElementById("rate")
+  .textContent=
+  (bet
+    ?Math.round(payout/bet*100)
+    :0
+  )+"%";
+
+  document.getElementById("profit")
+  .textContent=
+  (payout-bet)+"円";
+
+  document.getElementById("history")
+  .innerHTML=
+
+  state.replays
+  .slice(0,5)
+  .map(r=>
+
+    `
+    <div class="row">
+      <span>
+        ${r.track}
+        ${r.ticket}
+      </span>
+
+      <span>
+        ${r.bet}
+        →
+        ${r.payout}
+      </span>
+    </div>
+    `
+
+  )
+  .join("")
+
+  ||
+
+  "Replay履歴なし";
+
+}
+
+function saveReplay(){
+
+  const replay={
+
+    track:
+    document
+    .getElementById("track")
+    .value
+    ||
+    "-",
+
+    ticket:
+    document
+    .getElementById("ticket")
+    .value,
+
+    bet:
+    Number(
+      document
+      .getElementById("bet")
+      .value
+    )
+    ||0,
+
+    payout:
+    Number(
+      document
+      .getElementById("payout")
+      .value
+    )
+    ||0
+
+  };
+
+  state.replays.unshift(replay);
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(state)
+  );
+
+  renderVault();
+
+  alert(
+    "Replayを保存しました"
+  );
+
+}
+
+renderVault();
+
+</script>
+
+</body>
+</html>
